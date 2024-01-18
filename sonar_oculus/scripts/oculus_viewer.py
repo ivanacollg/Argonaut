@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import numpy as np
 import cv2
 import sys
@@ -20,7 +20,7 @@ bridge = cv_bridge.CvBridge()
 
 to_rad = lambda bearing: bearing * np.pi / 18000
 
-vis_lines = True
+vis_lines = False
 
 def generate_map_xy(ping):
     _res = ping.range_resolution
@@ -58,7 +58,7 @@ def ping_callback(msg):
     cm = rospy.get_param('/sonar_oculus_node/Colormap', 1)
 
     #decode the compressed image
-    img = np.fromstring(msg.ping.data,np.uint8)
+    img = np.frombuffer(msg.ping.data,np.uint8)
     img = cv2.imdecode(img,cv2.IMREAD_COLOR)
 
     if raw:
