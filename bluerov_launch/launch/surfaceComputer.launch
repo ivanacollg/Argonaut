@@ -5,8 +5,9 @@
     <arg name="depth" default="true"/>
     <arg name="sonar" default="false"/>
     <arg name="gps" default="false"/>
-    <arg name="camera" default="true"/>
+    <arg name="camera" default="false"/>
     <arg name="joy" default="false"/>
+    <arg name="sonar_viewer" default="true"/>
 
     <!-- global salinity parameter used by sonar/dvl/depth -->
     <arg name="water" default="fresh"/>
@@ -52,5 +53,8 @@
     <node if="$(arg gps)" pkg="waterlinked_gps" name="waterlinked_gps_node" type="waterlinked_gps_node.py" output="screen"/>
 
     <node if="$(arg camera)" pkg="bluerov_launch" name="video" type="video.py" output="screen"/>
+
+    <node if="$(arg sonar_viewer)" pkg="sonar_oculus" name="oculus_viewerM750d" type="oculus_viewer.py" output="screen" args="M750d"/>
+    <node if="$(arg sonar_viewer)" pkg="sonar_oculus" name="oculus_viewerM1200d" type="oculus_viewer.py" output="screen" args="M1200d"/>
 
 </launch>
