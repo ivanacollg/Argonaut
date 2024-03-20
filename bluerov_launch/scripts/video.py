@@ -159,7 +159,7 @@ if __name__ == '__main__':
         info_manger = camera_info_manager.CameraInfoManager(cname='camera', namespace='camera')
         info_manger.loadCameraInfo()
 
-    rate = rospy.Rate(10)
+    rate = rospy.Rate(5)
     rospy.loginfo("Video node started")
     while not rospy.is_shutdown():
         # Wait for the next frame

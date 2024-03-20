@@ -5,9 +5,11 @@
     <arg name="depth" default="true"/>
     <arg name="sonar" default="false"/>
     <arg name="gps" default="false"/>
-    <arg name="camera" default="false"/>
+    <arg name="camera" default="true"/>
     <arg name="joy" default="false"/>
     <arg name="sonar_viewer" default="true"/>
+    <arg name="rviz" default="true"/>
+    <arg name="plot" default="true"/>
 
     <!-- global salinity parameter used by sonar/dvl/depth -->
     <arg name="water" default="fresh"/>
@@ -56,5 +58,10 @@
 
     <node if="$(arg sonar_viewer)" pkg="sonar_oculus" name="oculus_viewerM750d" type="oculus_viewer.py" output="screen" args="M750d"/>
     <node if="$(arg sonar_viewer)" pkg="sonar_oculus" name="oculus_viewerM1200d" type="oculus_viewer.py" output="screen" args="M1200d"/>
+
+    <node if="$(arg rviz)" type="rviz" name="rviz" pkg="rviz" args="-d $(find bluerov_launch)/rviz/sensors.rviz" />
+
+    <include if="$(arg plot)" file="$(find bluerov_launch)/launch/plot.launch">
+    </include>
 
 </launch>
