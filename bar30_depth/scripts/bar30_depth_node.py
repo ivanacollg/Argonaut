@@ -1,10 +1,10 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import sys
 import socket
 import rospy
 from bar30_depth.msg import Depth
 
-from bluerov_bridge import Bridge
+from bluerov_bridge.bridge import Bridge
 
 FLUID_DENSITY = {'fresh': 9.97, 'salt': 10.29}
 
