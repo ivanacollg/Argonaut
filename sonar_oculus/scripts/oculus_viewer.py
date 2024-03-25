@@ -20,7 +20,7 @@ bridge = cv_bridge.CvBridge()
 
 to_rad = lambda bearing: bearing * np.pi / 18000
 
-vis_lines = False
+vis_lines = True
 
 def generate_map_xy(ping):
     _res = ping.range_resolution
