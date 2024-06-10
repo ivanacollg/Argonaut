@@ -41,8 +41,4 @@
 
     <node if="$(arg gps)" pkg="waterlinked_gps" name="waterlinked_gps_node" type="waterlinked_gps_node.py" output="screen"/>
 
-    <node if="$(arg camera)" pkg="bluerov_launch" name="video" type="video.py" output="screen">
-        <param name="compressed_flag" value="true"/>
-    </node>
-
 </launch>
