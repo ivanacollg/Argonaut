@@ -10,6 +10,7 @@
     <arg name="sonar_viewer" default="true"/>
     <arg name="rviz" default="true"/>
     <arg name="plot" default="true"/>
+    <arg name="stereo" default="true"/>
 
     <!-- global salinity parameter used by sonar/dvl/depth -->
     <arg name="water" default="fresh"/>
@@ -65,6 +66,11 @@
 
     <include if="$(arg plot)" file="$(find bluerov_launch)/launch/plot.launch">
     </include>
+
+    <include if="$(arg stereo)" file="$(find stereo_sonar)/launch/stereoSonar.launch">
+    </include>
+
+    <node pkg="tf2_ros" name="map_to_baselink_tf_publisher" type="static_transform_publisher" args="0 0 0 0 0 1.5708 map base_link"/>
 
     <!-- For off line testong only-->
     <!--node pkg="tf2_ros" type="static_transform_publisher" name="world2baselink" args="0 0 0 0 0 1.57  world base_link" /-->
