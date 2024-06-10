@@ -42,7 +42,7 @@ class ImageNode():
     def image_callback(self, msg):
         #decode the compressed image
         img = self.bridge.compressed_imgmsg_to_cv2(msg, "bgr8")
-        print(img.shape)
+        #print("img shape", img.shape)
 
         h,  w = img.shape[:2]
         new_K, roi = cv2.getOptimalNewCameraMatrix(self.K, self.D, (w,h), 1, (w,h))
@@ -52,6 +52,7 @@ class ImageNode():
         # crop the image
         x, y, w, h = roi
         #dst = dst[y:y+h, x:x+w]
+        #print("dst shape", dst.shape)
 
         img_msg = self.bridge.cv2_to_imgmsg(dst, encoding="bgr8")
         img_msg.header.stamp = rospy.Time.now()
