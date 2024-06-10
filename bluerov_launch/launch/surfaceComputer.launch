@@ -66,5 +66,7 @@
     <include if="$(arg plot)" file="$(find bluerov_launch)/launch/plot.launch">
     </include>
 
+    <!-- For off line testong only-->
+    <!--node pkg="tf2_ros" type="static_transform_publisher" name="world2baselink" args="0 0 0 0 0 1.57  world base_link" /-->
 
 </launch>
