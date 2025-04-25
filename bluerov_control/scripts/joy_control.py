@@ -1,9 +1,10 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import rospy
+import socket
 from sensor_msgs.msg import Joy
 from geometry_msgs.msg import Twist
 
-from bluerov_bridge import Bridge
+from bluerov_bridge.bridge import Bridge
 
 
 cmd_vel_enabled = False
@@ -32,48 +33,83 @@ def cmd_vel_sub(msg):
 
 def joy_callback(msg):
     global x, y, z, yaw, armed, cmd_vel_enabled, depth_hold
-
-    # Arm / disarm
-    if msg.buttons[0]:
+    '''
+    # Arm / disarm Logitech controller
+    if msg.buttons[7]:
         armed = True
         rospy.loginfo('Arm the vehicle...')
-    if msg.buttons[1]:
+    if msg.buttons[6]:
         armed = False
         rospy.loginfo('Disarm the vehicle...')
 
-    if msg.buttons[8]:
+    if msg.buttons[2]:
         cmd_vel_enabled = True
         rospy.loginfo('Enable move_base control...')
-    if msg.buttons[3]:
+    if msg.buttons[1]:
         cmd_vel_enabled = False
         rospy.loginfo('Disable move_base control...')
 
     # Depth hold / manual
-    if msg.buttons[2]:
+    if msg.buttons[3]:
         depth_hold = True
         rospy.loginfo('Turn on depth hold mode...')
-    if msg.buttons[9]:
+    if msg.buttons[0]:
         depth_hold = False
         rospy.loginfo('Turn on manual mode...')
     
     if cmd_vel_enabled:
         return
 
-    # Movement
-    x1 = 1500 + int(msg.axes[1] * translation_limit)
-    y1 = 1500 + int(msg.axes[0] * translation_limit)
+    # Movement Logitech controller
+    x1 = 1500 + int(msg.axes[4] * translation_limit)
+    y1 = 1500 + int(msg.axes[3] * translation_limit)
+    z = 1500 + int(msg.axes[7] * translation_limit)
+    yaw1 = 1500 - int(msg.axes[6] * rotation_limit)
+    '''
+
+    # Arm / disarm Video Ray controller
+    if msg.buttons[6]:
+        armed = True
+        rospy.loginfo('Arm the vehicle...')
+    if msg.buttons[7]:
+        armed = False
+        rospy.loginfo('Disarm the vehicle...')
+
+    if msg.buttons[9]:
+        cmd_vel_enabled = True
+        rospy.loginfo('Enable move_base control...')
+    if msg.buttons[2]:
+        cmd_vel_enabled = False
+        rospy.loginfo('Disable move_base control...')
+
+    # Depth hold / manual
+    if msg.buttons[3]:
+        depth_hold = True
+        rospy.loginfo('Turn on depth hold mode...')
+    if msg.buttons[8]:
+        depth_hold = False
+        rospy.loginfo('Turn on manual mode...')
+    
+    if cmd_vel_enabled:
+        return
+
+    # Movement Videoray controller
+    x1 = 1500 + int(-msg.axes[1] * translation_limit)
+    y1 = 1500 + int(-msg.axes[0] * translation_limit)
     z = 1500 + int(msg.axes[5] * translation_limit)
     yaw1 = 1500 - int(msg.axes[2] * rotation_limit)
-
+    
     # Cruise control
-    x2 = 1500 + int(msg.axes[3] * translation_limit)
+    x2 = 1500 #+ int(msg.axes[3] * translation_limit)
     y2 = 1500
-    yaw2 = 1500 - int(msg.axes[4] * rotation_limit)
+    yaw2 = 1500 #- int(msg.axes[4] * rotation_limit)
 
     # Normal movement has higher priority
     x = x1 if x1 != 1500 else x2
     y = y1 if y1 != 1500 else y2
     yaw = yaw1 if yaw1 != 1500 else yaw2
+    rospy.loginfo('Vel X: %f Y: %f, Z: %f, YAW: %f', x, y, z, yaw)
+
 
 
 if __name__ == '__main__':
@@ -87,6 +123,7 @@ if __name__ == '__main__':
     omega_to_cmd = rotation_limit / max_omega
 
     device = 'udp:192.168.2.1:14553'
+    
     while not rospy.is_shutdown():
         try:
             bridge = Bridge(device)
@@ -100,10 +137,11 @@ if __name__ == '__main__':
     if rospy.is_shutdown():
         sys.exit(-1)
     bridge.wait_conn()
-
+    
     joy_sub = rospy.Subscriber('/joy', Joy, joy_callback, queue_size=10)
     cmd_vel_sub = rospy.Subscriber('/cmd_vel', Twist, cmd_vel_sub)
 
+    
     while not rospy.is_shutdown():
         bridge.set_mode('manual')
         bridge.arm_throttle(False)
@@ -135,3 +173,8 @@ if __name__ == '__main__':
         if mode == 'MANUAL' and not arm:
             break
         rospy.sleep(0.5)
+    '''
+    rate = rospy.Rate(20)
+    while not rospy.is_shutdown():
+        rate.sleep()
+    '''

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import time
 
 from pymavlink import mavutil
@@ -24,7 +24,7 @@ class Bridge(object):
         msg = None
         while not msg:
             self.conn.mav.ping_send(
-                time.time(), # Unix time
+                int(time.time() * 1e6), # Unix time
                 0, # Ping number
                 0, # Request ping of all systems
                 0 # Request ping of all components
