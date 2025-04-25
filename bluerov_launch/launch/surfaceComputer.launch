@@ -77,6 +77,6 @@
     <!--node pkg="tf2_ros" name="map_to_baselink_tf_publisher" type="static_transform_publisher" args="0 0 0 0 0 1.5708 map base_link"/-->
 
     <!-- For off line testong only-->
-    <!--node pkg="tf2_ros" type="static_transform_publisher" name="world2baselink" args="0 0 0 0 0 1.57  world base_link" /-->
+    <node pkg="tf2_ros" type="static_transform_publisher" name="world2baselink" args="0 0 0 0 0 1.57  world base_link" />
 
 </launch>
