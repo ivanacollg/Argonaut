@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
 BlueRov video capture class
 """
@@ -150,16 +150,17 @@ if __name__ == '__main__':
     rospy.init_node("bluerov_video_node")
     # Create the video object
     # Add port= if is necessary to use a different one
-    video = Video(4777)
+    video = Video(5600)
     bridge = cv_bridge.CvBridge()
-    img_pub = rospy.Publisher('/camera/image', Image, queue_size=10)
+    img_pub = rospy.Publisher('/camera/image_raw', Image, queue_size=10)
 
     if pub_info:
         info_pub = rospy.Publisher('/camera/camera_info', CameraInfo, queue_size=10)
         info_manger = camera_info_manager.CameraInfoManager(cname='camera', namespace='camera')
         info_manger.loadCameraInfo()
 
-    rate = rospy.Rate(10)
+    rate = rospy.Rate(5)
+    rospy.loginfo("Video node started")
     while not rospy.is_shutdown():
         # Wait for the next frame
         if not video.frame_available():

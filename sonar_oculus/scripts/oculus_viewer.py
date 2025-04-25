@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import numpy as np
 import cv2
 import sys
@@ -49,6 +49,7 @@ def generate_map_xy(ping):
     y = res * (-cols / 2.0 + XX + 0.5)
     b = np.arctan2(y, x) * REVERSE_Z
     r = np.sqrt(np.square(x) + np.square(y))
+    #print("range "+ str(r))
     map_y = np.asarray(r / res, dtype=np.float32)
     map_x = np.asarray(f_bearings(b), dtype=np.float32)
 
@@ -58,7 +59,7 @@ def ping_callback(msg):
     cm = rospy.get_param('/sonar_oculus_node/Colormap', 1)
 
     #decode the compressed image
-    img = np.fromstring(msg.ping.data,np.uint8)
+    img = np.frombuffer(msg.ping.data,np.uint8)
     img = cv2.imdecode(img,cv2.IMREAD_COLOR)
 
     if raw:
@@ -80,8 +81,10 @@ def ping_callback(msg):
 
         if vis_lines:
             img = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
-            cv2.line(img,(334,0),(334,1000),[0,255,0],5)
-            cv2.line(img,(177,0),(177,1000),[0,255,0],5)
+            #cv2.line(img,(334,0),(334,1000),[0,255,0],5)
+            #cv2.line(img,(177,0),(177,1000),[0,255,0],5)
+            cv2.line(img,(295,0),(295,1000),[0,255,0],5)
+            cv2.line(img,(216,0),(216,1000),[0,255,0],5)
 
 
         img = cv2.remap(img, map_x, map_y, cv2.INTER_LINEAR)

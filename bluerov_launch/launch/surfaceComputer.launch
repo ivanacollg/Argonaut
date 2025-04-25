@@ -6,7 +6,12 @@
     <arg name="sonar" default="false"/>
     <arg name="gps" default="false"/>
     <arg name="camera" default="true"/>
-    <arg name="joy" default="false"/>
+    <arg name="joy" default="true"/>
+    <arg name="move_base" default="false"/>
+    <arg name="sonar_viewer" default="true"/>
+    <arg name="rviz" default="true"/>
+    <arg name="plot" default="true"/>
+    <arg name="stereo" default="true"/>
 
     <!-- global salinity parameter used by sonar/dvl/depth -->
     <arg name="water" default="fresh"/>
@@ -30,6 +35,9 @@
         <arg name="max_omega" value="$(arg max_omega)"/>
     </include>
 
+    <!--include if="$(arg move_base)" file="$(find bluerov_control)/launch/move_base.launch">
+    </include-->
+
     <node if="$(arg imu)" pkg="bluerov_launch" name="connect_vn100_imu" type="connect_vn100_imu.sh"/>
     <include if="$(arg imu)" file="$(find imu_vn_100)/launch/vn_100_cont.launch">
         <arg name="port" value="/tmp/vn100_imu"/>
@@ -51,6 +59,24 @@
 
     <node if="$(arg gps)" pkg="waterlinked_gps" name="waterlinked_gps_node" type="waterlinked_gps_node.py" output="screen"/>
 
-    <node if="$(arg camera)" pkg="bluerov_launch" name="video" type="video.py" output="screen"/>
+    <node if="$(arg camera)" pkg="bluerov_launch" name="video" type="video_compressed.py" output="screen">
+        <param name="compressed_flag" value="true"/>
+    </node>
+
+    <node if="$(arg sonar_viewer)" pkg="sonar_oculus" name="oculus_viewerM750d" type="oculus_viewer.py" output="screen" args="M750d"/>
+    <node if="$(arg sonar_viewer)" pkg="sonar_oculus" name="oculus_viewerM1200d" type="oculus_viewer.py" output="screen" args="M1200d"/>
+
+    <node if="$(arg rviz)" type="rviz" name="rviz" pkg="rviz" args="-d $(find bluerov_launch)/rviz/sensors.rviz" />
+
+    <!--include if="$(arg plot)" file="$(find bluerov_launch)/launch/plot.launch">
+    </include-->
+
+    <!--include if="$(arg stereo)" file="$(find stereo_sonar)/launch/stereoSonar.launch">
+    </include-->
+
+    <!--node pkg="tf2_ros" name="map_to_baselink_tf_publisher" type="static_transform_publisher" args="0 0 0 0 0 1.5708 map base_link"/-->
+
+    <!-- For off line testong only-->
+    <node pkg="tf2_ros" type="static_transform_publisher" name="world2baselink" args="0 0 0 0 0 1.57  world base_link" />
 
 </launch>

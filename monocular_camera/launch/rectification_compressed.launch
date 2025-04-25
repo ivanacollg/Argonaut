@@ -1,0 +1,10 @@
+<launch>
+
+  <!-- Start the rectification node -->
+  <node name="rectification_node" pkg="monocular_camera" type="rectification_compressed_node.py" output="screen">
+    <param name="sub_topic" value="/camera/image_raw/compressed"/>
+    <param name="pub_topic" value="/camera/image_rect"/>
+    <rosparam file="$(find monocular_camera)/config/calibration.yaml" />
+  </node>
+
+</launch>
